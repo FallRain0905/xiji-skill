@@ -1,0 +1,50 @@
+# xiji-homework
+
+希冀平台（[course.educg.net](https://course.educg.net)）Python 课程作业的自动化 skill：登录、查看作业、四类题型提交（CodeMirror 编程 / 程序片段填空 / 单选 / 文件上传）、判错排查。全部流程来自真实课程的反复实战。
+
+## 安装
+
+把 `xiji-homework/` 目录放进 ZCode 的 skill 发现路径之一：
+
+```
+# 项目级（只在本仓库生效）
+<project>/.agents/skills/xiji-homework/
+
+# 或用户级（全局生效）
+~/.agents/skills/xiji-homework/
+```
+
+依赖：`browser-use:control-browser` skill（浏览器自动化本体）。
+
+## 使用
+
+装好后，对 ZCode 说类似：
+
+- 「看看希冀平台有没有新作业」
+- 「把 51600 这个作业做完」
+- 「这道题判了输出错误，帮我看看为什么」
+
+skill 会自动触发；也可显式 `/xiji-homework`。
+
+## 结构
+
+```
+xiji-homework/
+├── SKILL.md              # 主流程：登录 → 列作业 → 四类题型提交 → 判错排查 → 做题质量流程
+└── references/
+    └── pitfalls.md       # 判错排查清单（格式/类型/缩进/文件读写/语义/平台行为）
+```
+
+## 覆盖的实战坑（节选）
+
+- 验证码大小写敏感；登录按钮必须用 `cgstuloginbtn` id 定位
+- 填空题缩进：平台可能自动加基础缩进（内容须顶格），也可能不加（内容自带缩进）——按模板行尾判断
+- 单选题的「提交并继续」链接只跳转不提交，必须直接 submit 表单
+- csv.writer 会给含逗号字段自动加引号，判题期望无引号时要手写
+- 提示符的每个空格都算分；行尾空格与结尾换行用 `repr()` 对比
+- 文件题用 try/except 回退读 stdin，评测有没有给文件都能过
+- 作业过期后无任何提交入口，截止前务必提交
+
+## 隐私
+
+SKILL.md 不包含任何账号信息。凭据请放在你自己的用户记忆或环境变量里，不要提交到公开仓库。

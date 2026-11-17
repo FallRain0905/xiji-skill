@@ -1,0 +1,7 @@
+# 别提交真实凭据或个人数据
+memory/
+*.session
+*.log
+artifacts/
+_test_*.py
+_cup_raw.txt
